@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="QuizForge interactive quiz and assessment engine with timed tests, scoring, review and analytics.">
+  <meta name="theme-color" content="#101d36">
+  <title>QuizForge | Assessment Engine</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: "#315efb",
+            ink: "#101d36"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="QuizForge home">
+      <span class="brand-mark">Q</span>
+      <span>QuizForge</span>
+    </a>
+    <span class="topbar-label">ASSESSMENT PLATFORM</span>
+  </header>
+
+  <main class="container">
+    <!-- Setup screen -->
+    <section id="setup-screen" class="screen">
+      <div class="hero">
+        <span class="eyebrow">LEARN • TEST • IMPROVE</span>
+        <h1>Measure what you <span>know.</span></h1>
+        <p>Take an interactive assessment, track your performance and discover where to improve.</p>
+      </div>
+
+      <div class="setup-card">
+        <div class="card-heading">
+          <div>
+            <span class="eyebrow">READY WHEN YOU ARE</span>
+            <h2>Assessment setup</h2>
+          </div>
+          <span class="status-dot">Available</span>
+        </div>
+
+        <label class="field-label" for="candidate-name">Your name</label>
+        <input id="candidate-name" class="text-field" type="text"
+               placeholder="Enter your name" maxlength="60">
+
+        <label class="field-label" for="quiz-category">Assessment</label>
+        <select id="quiz-category" class="text-field">
+          <option value="all">General knowledge</option>
+          <option value="javascript">JavaScript fundamentals</option>
+          <option value="web">Web development</option>
+        </select>
+
+        <div class="settings-grid">
+          <div>
+            <label class="field-label" for="question-count">Questions</label>
+            <select id="question-count" class="text-field">
+              <option value="5">5 questions</option>
+              <option value="8">8 questions</option>
+              <option value="10">10 questions</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="duration">Time limit</label>
+            <select id="duration" class="text-field">
+              <option value="5">5 minutes</option>
+              <option value="10" selected>10 minutes</option>
+              <option value="15">15 minutes</option>
+              <option value="0">No time limit</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="toggle-row">
+          <span>
+            <strong>Timed assessment</strong>
+            <small>Automatically submit when time expires.</small>
+          </span>
+          <input id="timed-mode" type="checkbox" checked>
+        </label>
+
+        <button id="start-btn" class="primary-btn">Start assessment <span>→</span></button>
+        <p id="setup-error" class="error-message" role="alert"></p>
+      </div>
+
+      <div class="feature-row">
+        <div><strong>01</strong><span>Answer questions</span></div>
+        <div><strong>02</strong><span>Get your score</span></div>
+        <div><strong>03</strong><span>Review performance</span></div>
+      </div>
+    </section>
+
+    <!-- Quiz screen -->
+    <section id="quiz-screen" class="screen hidden">
+      <div class="quiz-top">
+        <div>
+          <span class="eyebrow">YOUR ASSESSMENT</span>
+          <h2 id="quiz-title">General knowledge</h2>
+        </div>
+        <div class="timer-box" id="timer-box">
+          <span class="timer-label">TIME REMAINING</span>
+          <strong id="timer">10:00</strong>
+        </div>
+      </div>
+
+      <div class="progress-info">
+        <span id="question-progress">Question 1 of 5</span>
+        <span id="progress-percent">20%</span>
+      </div>
+      <div class="progress-track">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+
+      <article class="question-card">
+        <div class="question-meta">
+          <span id="question-category" class="category-pill">JavaScript</span>
+          <span id="question-type" class="muted-text">Single choice</span>
+        </div>
+
+        <h2 id="question-text">Question text goes here</h2>
+        <p id="question-instruction" class="muted-text"></p>
+
+        <div id="answer-area" class="answer-area"></div>
+
+        <p id="answer-error" class="error-message" role="alert"></p>
+      </article>
+
+      <div class="quiz-actions">
+        <button id="previous-btn" class="secondary-btn">← Previous</button>
+        <button id="next-btn" class="primary-btn">Next question →</button>
+        <button id="submit-btn" class="primary-btn hidden">Submit assessment</button>
+      </div>
+    </section>
+
+    <!-- Results screen -->
+    <section id="results-screen" class="screen hidden">
+      <div class="results-heading">
+        <span class="eyebrow">ASSESSMENT COMPLETED</span>
+        <h1 id="result-greeting">Well done!</h1>
+        <p id="result-message">Here is your performance summary.</p>
+      </div>
+
+      <div class="score-card">
+        <span class="muted-text">YOUR FINAL SCORE</span>
+        <div class="score-number"><strong id="score-percent">0%</strong></div>
+        <span id="score-badge" class="score-badge">Keep practising</span>
+        <p id="score-detail">0 out of 0 correct answers</p>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span>Correct answers</span>
+          <strong id="correct-count">0</strong>
+        </div>
+        <div class="metric-card">
+          <span>Incorrect answers</span>
+          <strong id="incorrect-count">0</strong>
+        </div>
+        <div class="metric-card">
+          <span>Unanswered</span>
+          <strong id="unanswered-count">0</strong>
+        </div>
+        <div class="metric-card">
+          <span>Time used</span>
+          <strong id="time-used">00:00</strong>
+        </div>
+      </div>
+
+      <div class="recommendation-card">
+        <span class="eyebrow">PERSONALIZED FEEDBACK</span>
+        <h3 id="recommendation-title">Your next step</h3>
+        <p id="recommendation-text"></p>
+      </div>
+
+      <div class="analytics-card">
+        <div class="card-heading">
+          <div>
+            <span class="eyebrow">PERFORMANCE INSIGHTS</span>
+            <h2>Topic breakdown</h2>
+          </div>
+        </div>
+        <div id="topic-breakdown"></div>
+      </div>
+
+      <div class="results-actions">
+        <button id="review-btn" class="secondary-btn">Review answers</button>
+        <button id="restart-btn" class="primary-btn">Take another assessment ↻</button>
+      </div>
+    </section>
+
+    <!-- Review screen -->
+    <section id="review-screen" class="screen hidden">
+      <div class="review-heading">
+        <span class="eyebrow">LEARNING MODE</span>
+        <h1>Review your answers</h1>
+        <p>Understand your mistakes and learn from the explanations.</p>
+      </div>
+
+      <div id="review-list" class="review-list"></div>
+
+      <button id="back-results-btn" class="primary-btn">Back to results</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <strong>QuizForge</strong>
+    <span>Built to make learning measurable.</span>
+    <small>Interactive Assessment Engine</small>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
